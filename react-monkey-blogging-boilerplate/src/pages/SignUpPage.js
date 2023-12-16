@@ -11,8 +11,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../firebase/firebase-config";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection } from "firebase/firestore";
+import AuthenticationPage from "./AuthenticationPage";
 
 const SignUpPageStyles = styled.div`
   min-height: 100vh;
@@ -103,73 +104,72 @@ const SignUpPage = () => {
   }, [errors]);
 
   return (
-    <SignUpPageStyles>
-      <div className="container">
-        <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
-        <h1 className="heading">Monkey Blogging</h1>
-        <form
-          className="form"
-          onSubmit={handleSubmit(handleSignUp)}
-          autoComplete="off"
-        >
-          <Field>
-            <Label htmlFor="fullName">Fullname</Label>
-            <Input
-              id="fullName"
-              type="text"
-              name="fullname"
-              placeholder="Enter your fullname"
-              control={control}
-            ></Input>
-          </Field>
-          <Field>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              name="email"
-              placeholder="Enter your email address"
-              control={control}
-            ></Input>
-          </Field>
-          <Field>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type={togglePassword ? "text" : "password"}
-              name="password"
-              placeholder="Enter your password"
-              control={control}
-            >
-              {!togglePassword && (
-                <IconEyeClose
-                  className="input-icon"
-                  onClick={() => setTogglePassword(true)}
-                ></IconEyeClose>
-              )}
-
-              {togglePassword && (
-                <IconEyeOpen
-                  className="input-icon"
-                  onClick={() => setTogglePassword(false)}
-                ></IconEyeOpen>
-              )}
-            </Input>
-          </Field>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            isLoading={isSubmitting}
-            style={{
-              margin: "0 auto",
-              maxWidth: 300,
-            }}
+    <AuthenticationPage>
+      <form
+        className="form"
+        onSubmit={handleSubmit(handleSignUp)}
+        autoComplete="off"
+      >
+        <Field>
+          <Label htmlFor="fullName">Fullname</Label>
+          <Input
+            id="fullName"
+            type="text"
+            name="fullname"
+            placeholder="Enter your fullname"
+            control={control}
+          ></Input>
+        </Field>
+        <Field>
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Enter your email address"
+            control={control}
+          ></Input>
+        </Field>
+        <Field>
+          <Label htmlFor="password">Password</Label>
+          <Input
+            id="password"
+            type={togglePassword ? "text" : "password"}
+            name="password"
+            placeholder="Enter your password"
+            control={control}
           >
-            Sign up
-          </Button>
-        </form>
-      </div>
-    </SignUpPageStyles>
+            {!togglePassword && (
+              <IconEyeClose
+                className="input-icon"
+                onClick={() => setTogglePassword(true)}
+              ></IconEyeClose>
+            )}
+
+            {togglePassword && (
+              <IconEyeOpen
+                className="input-icon"
+                onClick={() => setTogglePassword(false)}
+              ></IconEyeOpen>
+            )}
+          </Input>
+        </Field>
+        <div className="have-account">
+          You already have an account? <NavLink to="/sign-in">Login</NavLink>
+        </div>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          style={{
+            margin: "0 auto",
+            maxWidth: 300,
+          }}
+        >
+          Sign up
+        </Button>
+      </form>
+    </AuthenticationPage>
   );
 };
 

@@ -5,6 +5,7 @@
 }
 * {
   margin: 0;
+  padding: 0;
 }
 
 html,
@@ -53,4 +54,14 @@ body {
   max-width: 1000px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+ul {
+  text-decoration: none;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
