@@ -12,9 +12,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase/firebase-config";
 import { IconEyeClose, IconEyeOpen } from "../components/icon";
+import InputPasswordToggle from "../components/input/InputPasswordToggle";
 
 const schema = yup.object({
-  fullname: yup.string().required("Please enter your fullname"),
   email: yup
     .string()
     .email("Please enter valid email address")
@@ -28,12 +28,13 @@ const schema = yup.object({
 const SigninPage = () => {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
+
   const {
-    handleSubmit,
     control,
-    formState: { isValid, isSubmitting, errors },
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
   } = useForm({
-    mode: onchange,
+    mode: "all",
     resolver: yupResolver(schema),
   });
   const [togglePassword, setTogglePassword] = useState(false);
@@ -62,15 +63,18 @@ const SigninPage = () => {
         <Field>
           <Label htmlFor="email">Email address</Label>
           <Input
-            name="email"
+            id="email"
             type="email"
+            name="email"
             placeholder="Enter your email address"
             control={control}
           ></Input>
         </Field>
-        <Field>
+        <InputPasswordToggle control={control}></InputPasswordToggle>
+        {/* <Field>
           <Label htmlFor="password">Password</Label>
           <Input
+            id="password"
             name="password"
             type={togglePassword ? "text" : "password"}
             placeholder="Enter your password"
@@ -94,18 +98,20 @@ const SigninPage = () => {
             You already have not had an account?{" "}
             <NavLink to="/sign-up">Sign up</NavLink>
           </div>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            isLoading={isSubmitting}
-            style={{
-              margin: "0 auto",
-              maxWidth: 300,
-            }}
-          >
-            Sign in
-          </Button>
-        </Field>
+        </Field> */}
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
+          style={{
+            margin: "0 auto",
+            maxWidth: 300,
+          }}
+          className
+          kind="primary"
+        >
+          Sign in
+        </Button>
       </form>
     </AuthenticationPage>
   );

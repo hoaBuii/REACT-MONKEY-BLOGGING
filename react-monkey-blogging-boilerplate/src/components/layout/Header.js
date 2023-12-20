@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "../button";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../contexts/auth-context";
 
 const menuLinks = [
   {
@@ -24,6 +25,11 @@ const HeaderStyles = styled.header`
   .header-main {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
   }
   .logo {
     display: inline-block;
@@ -37,9 +43,8 @@ const HeaderStyles = styled.header`
     font-weight: 500;
   }
   .header-right {
-    margin-left: auto;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 10px;
   }
   .search {
@@ -61,28 +66,51 @@ const HeaderStyles = styled.header`
     right: 15px;
     cursor: pointer;
   }
-  .header-button {
-    margin-left: 20px;
+  .header-auth {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    border-radius: 4px;
+    strong span {
+      display: inline-block;
+    }
   }
 `;
 
+function getLastName(name) {
+  if (!name) return "";
+  const length = name?.split(" ").length;
+  return name.split(" ")[length - 1];
+}
+
 const Header = () => {
+  const { userInfo } = useAuth();
+
   return (
     <HeaderStyles>
       <div className="container">
         <div className="header-main">
-          <NavLink to="/">
-            <img srcSet="/logo.png 2x" alt="monkey-blogging" className="logo" />
-          </NavLink>
-          <ul className="menu">
-            {menuLinks.map((item) => (
-              <li className="menu-item" key={item.title}>
-                <NavLink to={item.url} className="menu-link">
-                  {item.title}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
+          <div className="header-left">
+            <NavLink to="/">
+              <img
+                srcSet="/logo.png 2x"
+                alt="monkey-blogging"
+                className="logo"
+              />
+            </NavLink>
+            <ul className="menu">
+              {menuLinks.map((item) => (
+                <li className="menu-item" key={item.title}>
+                  <NavLink to={item.url} className="menu-link">
+                    {item.title}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
           <div className="header-right">
             <div className="search">
               <input
@@ -121,14 +149,24 @@ const Header = () => {
                 </svg>
               </span>
             </div>
-            <Button
-              style={{ maxWidth: "200px" }}
-              height="56px"
-              className="header-button"
-              to="/sign-up"
-            >
-              Sign up
-            </Button>
+            {!userInfo ? (
+              <Button
+                style={{ maxWidth: "200px" }}
+                height="56px"
+                className="header-button"
+                to="/sign-up"
+                type="button"
+              >
+                Sign up
+              </Button>
+            ) : (
+              <button className="header-auth">
+                <span>Welcome back,&nbsp;</span>
+                <strong className="text-primary">
+                  {getLastName(userInfo?.displayName)}
+                </strong>
+              </button>
+            )}
           </div>
         </div>
       </div>

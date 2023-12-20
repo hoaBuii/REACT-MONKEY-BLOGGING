@@ -1,7 +1,8 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { LoadingSpinner } from "../loading";
 import PropTypes from "prop-types";
+import { NavLink } from "react-router-dom";
 
 const ButtonStyles = styled.button`
   cursor: pointer;
@@ -16,11 +17,18 @@ const ButtonStyles = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: linear-gradient(
-    to right bottom,
-    ${(props) => props.theme.primary},
-    ${(props) => props.theme.secondary}
-  );
+  background-color: white;
+  color: ${(props) => props.theme.primary};
+  ${(props) =>
+    props?.kind === "primary" &&
+    css`
+      color: white;
+      background-image: linear-gradient(
+        to right bottom,
+        ${(props) => props.theme.primary},
+        ${(props) => props.theme.secondary}
+      );
+    `};
 
   &:disabled {
     opacity: 0.5;
@@ -34,7 +42,7 @@ const Button = ({
   children,
   ...props
 }) => {
-  const { isLoading } = props;
+  const { isLoading, to } = props;
   const child = !!isLoading ? <LoadingSpinner></LoadingSpinner> : children;
   return (
     <ButtonStyles type={type} onClick={onClick} {...props}>
@@ -44,7 +52,7 @@ const Button = ({
 };
 
 Button.propTypes = {
-  type: PropTypes.oneOf(["button", "submit"]).isRequired,
+  // type: PropTypes.oneOf(["button", "submit"]).isRequired,
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
   children: PropTypes.node,
