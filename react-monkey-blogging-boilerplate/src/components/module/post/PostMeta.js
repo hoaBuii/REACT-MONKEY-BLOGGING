@@ -28,6 +28,7 @@ const PostMeta = ({
   date = "Mar 23",
   authorName = "Andiez Le",
   className = "",
+  to = "/",
 }) => {
   return (
     <PostMetaStyles className={className}>
