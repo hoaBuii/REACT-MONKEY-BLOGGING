@@ -7,7 +7,7 @@ import {
 } from "firebase/storage";
 import React, { useState } from "react";
 
-function useFirebaseImage(setValue, getValues) {
+function useFirebaseImage(setValue, getValues, imageName = null, cb = null) {
   const storage = getStorage();
   const [progress, setProgress] = useState(0);
   const [image, setImage] = useState("");
@@ -55,19 +55,30 @@ function useFirebaseImage(setValue, getValues) {
   };
 
   const handleDeleteImage = () => {
-    const imageRef = ref(storage, "images/" + getValues("image_name"));
+    const storage = getStorage();
+    const imageRef = ref(
+      storage,
+      "images/" + (imageName || getValues("image_name"))
+    );
 
     deleteObject(imageRef)
       .then(() => {
         setImage("");
         setProgress(0);
+        cb && cb();
       })
       .catch((error) => {});
+  };
+
+  const handleResetUpload = () => {
+    setImage("");
+    setProgress(0);
   };
 
   return {
     image,
     setImage,
+    handleResetUpload,
     progress,
     setProgress,
     handleSelectImage,

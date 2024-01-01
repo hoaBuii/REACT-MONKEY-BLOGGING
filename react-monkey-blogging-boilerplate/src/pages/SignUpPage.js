@@ -12,7 +12,13 @@ import { toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db } from "../firebase/firebase-config";
 import { NavLink, useNavigate } from "react-router-dom";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import AuthenticationPage from "./AuthenticationPage";
 import InputPasswordToggle from "../components/input/InputPasswordToggle";
 import slugify from "slugify";
@@ -82,6 +88,8 @@ const SignUpPage = () => {
     );
     await updateProfile(auth.currentUser, {
       displayName: values.fullname,
+      photoURL:
+        "https://images.unsplash.com/photo-1703252932379-3bbcb1b9c311?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     });
     const colRef = collection(db, "users");
     await setDoc(doc(db, "users", auth.currentUser.uid), {
@@ -89,6 +97,11 @@ const SignUpPage = () => {
       email: values.email,
       password: values.password,
       username: slugify(values.fullname, { lower: true }),
+      avatar:
+        "https://images.unsplash.com/photo-1703252932379-3bbcb1b9c311?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      status: 1,
+      role: 3,
+      createdAt: serverTimestamp(),
     });
     toast.success("Register successfully!!!");
     naviagte("/");
